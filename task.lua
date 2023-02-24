@@ -1,22 +1,13 @@
 require('libspeedtest')
 require("argparse")
-local argparse = require("argparse")
+require("functions")
 local json = require "cjson"
 
 local servers = json.decode(readFile("servers.json"))
 ip = getIpAddress()
 location = getLocationData(ip) -- get current location data 
-local parser = argparse("speedtest", "An speedtest library.")
 
-parser:option("-c --country"):args(1):default("ALL")
-parser:flag("-a --auto")
-parser:flag("-u --upload")
-parser:flag("-d --download")
-parser:flag("-g --get-location")
-parser:option("-h --host"):args("1")
-parser:option("-o --output", "Save result to a file", "result.txt"):args("?")
-
-local args = parser:parse()
+local args = getArgumentParser():parse()
 local host
 local result = {} -- result table
 
