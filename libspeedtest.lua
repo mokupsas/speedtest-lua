@@ -3,6 +3,9 @@
 local cURL = require "cURL"
 require "curlHandler"
 local json = require "cjson"
+--Enums
+require("taskType")
+require("statusType")
 
 function getServerLatency(host)
     c = curlEasy(host, 1, true, false)
@@ -12,7 +15,8 @@ function getServerLatency(host)
 
     -- Checking for errors
     if err then 
-        print('Error occured with host: ' .. host) 
+        -- print('Error occured with host: ' .. host) 
+        print(json.encode({status=STATUS_ERROR, error_msg="Error occured with host: ".. host, task=TASK_TYPE_HOST, continue=true}))
     end
 
     -- Checking if server response was successful
@@ -43,6 +47,7 @@ function getLowestLatencyHost(servers)
 end
 
 function getDownloadSpeed(url)
+    print(json.encode({status=STATUS_PENING, task=TASK_TYPE_DOWNLOAD}))
     c = curlEasy(url, 40, true, true)
     c:setopt_accept_encoding('gzip, deflate, br')
     c:perform()
@@ -50,6 +55,7 @@ function getDownloadSpeed(url)
 end
 
 function getUploadSpeed(url)
+    print(json.encode({status=STATUS_PENING, task=TASK_TYPE_UPLOAD}))
     c = curlEasy(url, 40, true, false)
     c:setopt(cURL.OPT_POSTFIELDS, readFileByTime("/dev/zero", 1))
     c:perform()

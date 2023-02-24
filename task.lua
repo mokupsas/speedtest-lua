@@ -2,6 +2,10 @@ require('libspeedtest')
 require("argparse")
 require("functions")
 local json = require "cjson"
+--Enums
+require("taskType")
+require("statusType")
+
 
 local servers = json.decode(readFile("servers.json"))
 ip = getIpAddress()
@@ -13,6 +17,7 @@ local result = {} -- result table
 
 -- If task isn't to get location, find host
 if args.get_location == nil and args.host == nil then
+   print(json.encode({status=STATUS_PENING, task=TASK_TYPE_HOST}))
    host = getLowestLatencyHost(getSerersByCountry(servers, location['country_name']))
 elseif args.get_location == nil and args.host ~= nil then
    host = args.host
@@ -20,14 +25,26 @@ end
 
 -- Determine speedtest mode auto/upload/download
 if args.upload then
-   result['upload']  = getUploadSpeed(host .. '/upload.php')
+   result = {
+      status = STATUS_DONE,
+      task = TASK_TYPE_UPLOAD,
+      upload = getUploadSpeed(host .. '/upload.php')
+   }
 elseif args.download then 
-   result['download'] = getDownloadSpeed(host .. '/download')
+   result = {
+      status = STATUS_DONE,
+      task = TASK_TYPE_DOWNLOAD,
+      download = getDownloadSpeed(host .. '/download')
+   }
 elseif args.get_location then 
    result = location
 else -- auto
-   result['download'] = getDownloadSpeed(host .. '/download')
-   result['upload'] = getUploadSpeed(host .. '/upload.php')
+   result = {
+      status = STATUS_DONE,
+      task = TASK_TYPE_AUTO,
+      download = getDownloadSpeed(host .. '/download'),
+      upload = getUploadSpeed(host .. '/upload.php')
+   }
 end
 
 print(json.encode(result))
