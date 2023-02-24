@@ -13,6 +13,7 @@ parser:flag("-a --auto")
 parser:flag("-u --upload")
 parser:flag("-d --download")
 parser:flag("-g --get-location")
+parser:option("-h --host"):args("1")
 parser:option("-o --output", "Save result to a file", "result.txt"):args("?")
 
 local args = parser:parse()
@@ -23,8 +24,10 @@ local result = {} -- result table
 args.country = string.upper(args.country)
 
 -- If task isn't to get location, find host
-if args.get_location == nil then
+if args.get_location == nil and args.host == nil then
    host = getLowestLatencyHost(servers[args.country])
+elseif args.get_location == nil and args.host ~= nil then
+   host = args.host
 end
 
 -- Determine speedtest mode auto/upload/download
