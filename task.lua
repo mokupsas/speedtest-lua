@@ -17,6 +17,7 @@ parser:option("-o --output", "Save result to a file", "result.txt"):args("?")
 
 local args = parser:parse()
 local host
+local result = {} -- result table
 
 -- Validate country code
 args.country = string.upper(args.country)
@@ -28,16 +29,14 @@ end
 
 -- Determine speedtest mode auto/upload/download
 if args.upload then
-   uploadSpeed = getUploadSpeed(host .. '/upload.php')
-   print(uploadSpeed)
+   result['upload']  = getUploadSpeed(host .. '/upload.php')
 elseif args.download then 
-   downloadSpeed = getDownloadSpeed(host .. '/download')
-   print(downloadSpeed)
+   result['download'] = getDownloadSpeed(host .. '/download')
 elseif args.get_location then 
    print(args.get_location)
 else -- auto
-   downloadSpeed = getDownloadSpeed(host .. '/download')
-   print(downloadSpeed)
-   uploadSpeed = getUploadSpeed(host .. '/upload.php')
-   print(uploadSpeed)
+   result['download'] = getDownloadSpeed(host .. '/download')
+   result['upload'] = getUploadSpeed(host .. '/upload.php')
 end
+
+print(tableToJson(result))
