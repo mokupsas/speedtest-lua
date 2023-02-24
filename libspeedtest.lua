@@ -121,13 +121,17 @@ function readFileByTime(filename, time)
     return false
  end
 
- -- Result to json
-function outputJson(download, upload)
-    return '{"download": '.. download ..', "upload": '.. upload ..'}'
-end
+ -- Table to json string
+ function tableToJson(tabl)
+    local json = "{"
 
-function saveToFile(file, result)
-    file,err = io.open(file,'w')
-    file:write(result)
-    file:close()
+    local i=0
+    for k, v in pairs(tabl) do
+        if i>0 then json = json .. ', ' end -- adds comma between rows
+        json = json .. '"'.. k ..'": '.. v
+        i=i+1
+    end
+
+    json = json .. "}"
+    return json
 end
