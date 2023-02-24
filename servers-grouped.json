@@ -1,5 +1,162 @@
 
-[
+{
+  "LT": [
+    {
+      "Country": "Lithuania",
+      "City": "Alytus",
+      "Provider": "BaltCloud.eu",
+      "Host": "speed-alytus.baltcloud.eu:8080",
+      "ID": 8379
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Kaunas",
+      "Provider": "DOKEDA",
+      "Host": "speedtest.meganet.lt:8080",
+      "ID": 1050
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Kaunas",
+      "Provider": "Litnet",
+      "Host": "speedtest.litnet.lt:8080",
+      "ID": 16248
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Kaunas",
+      "Provider": "TEO LT, AB",
+      "Host": "speed-kaunas.zebra.lt:8080",
+      "ID": 1437
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Klaipeda",
+      "Provider": "UAB Splius",
+      "Host": "speedtest-klaipeda.splius.pro:8080",
+      "ID": 12613
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Klaipeda",
+      "Provider": "TEO LT",
+      "Host": "speed-klaipeda.zebra.lt:8080",
+      "ID": 1385
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Klaipeda",
+      "Provider": "Balticum TV",
+      "Host": "stnet1.balticum.lt:8080",
+      "ID": 3556
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Mazeikiai",
+      "Provider": "KLI LT, UAB",
+      "Host": "sp1.kli.lt:8080",
+      "ID": 12638
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Siauliai",
+      "Provider": "Kiwinet",
+      "Host": "speedtest.kiwinet.eu:8080",
+      "ID": 13939
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Siauliai",
+      "Provider": "www.bacloud.com",
+      "Host": "speedtest.bacloud.com:8080",
+      "ID": 10420
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Siauliai",
+      "Provider": "BalticServers.com",
+      "Host": "speedtest.balticservers.com:8080",
+      "ID": 5865
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Vilnius",
+      "Provider": "Nacionalinis telekomunikacijų tinklas",
+      "Host": "speedtest1.ntt.lt:8080",
+      "ID": 11789
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Vilnius",
+      "Provider": "TEO LT",
+      "Host": "speed-vilnius.zebra.lt:8080",
+      "ID": 1302
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Vilnius",
+      "Provider": "INIT",
+      "Host": "speedtest-vno.init.lt:8080",
+      "ID": 18277
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Vilnius",
+      "Provider": "Baltneta",
+      "Host": "speedtest1.balt.net:8080",
+      "ID": 21619
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Vilnius",
+      "Provider": "AB Lietuvos radijo ir televizijos centras",
+      "Host": "greitis.telecentras.lt:8080",
+      "ID": 7303
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Vilnius",
+      "Provider": "Rackray",
+      "Host": "speedtest.rackray.eu:8080",
+      "ID": 9100
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Vilnius",
+      "Provider": "Bite Lietuva",
+      "Host": "speedtest.bite.lt:8080",
+      "ID": 7579
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Vilnius",
+      "Provider": "Penki Kontinentai",
+      "Host": "speedtest.skynet.lt:8080",
+      "ID": 1728
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Vilnius",
+      "Provider": "UAB Omnitel",
+      "Host": "speedhost1.omnitel.net:8080",
+      "ID": 5314
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Vilnius",
+      "Provider": "Tele2",
+      "Host": "vln038-speedtest-1.tele2.net:8080",
+      "ID": 6083
+    },
+    {
+      "Country": "Lithuania",
+      "City": "Vilnius",
+      "Provider": "UAB Cgates",
+      "Host": "speedtest-01.cgates.lt:8080",
+      "ID": 3058
+    }
+  ],
+  "ALL": [
   {
     "Country": "Abkhazia",
     "City": "Sukhum",
@@ -83377,4 +83534,5 @@
     "Host": "www.fast.co.zw:8080",
     "ID": 16656
   }
-]
+  ]
+}
