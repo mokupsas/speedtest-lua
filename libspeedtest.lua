@@ -1,6 +1,7 @@
 -- Speedtest library
 
 local cURL = require "cURL"
+local json = require "cjson"
 
 function doesTableExist(table)
     if table ~= nil then
@@ -9,20 +10,22 @@ function doesTableExist(table)
     return false
 end
 
-function curlEasy(host, time_out, no_prog, ignore_cont_len)
-    headers = {
-        "Accept: text/*",
+function getHeaders()
+    return {
+        "Accept: */*",
         "Accept-Language: en",
         "User-Agent: Mozilla/5.0 (X11; Linux i686; rv:110.0) Gecko/20100101 Firefox/110.0",
         "Accept-Charset: iso-8859-1,*,utf-8",
         "Cache-Control: no-cache"
     }
+end
 
+function curlEasy(host, time_out, no_prog, ignore_cont_len)
     c = cURL.easy{
         url            = host,
         ssl_verifypeer = false,
         ssl_verifyhost = false,
-        httpheader     = headers,
+        httpheader     = getHeaders(),
         writefunction  = function(str)
             -- print(str)
         end
@@ -44,6 +47,23 @@ function curlEasy(host, time_out, no_prog, ignore_cont_len)
     end
 
     return c
+end
+
+function curlGetContent(host)
+    local response = {}
+
+    c = cURL.easy{
+        url            = host,
+        ssl_verifypeer = false,
+        ssl_verifyhost = false,
+        httpheader     = getHeaders(),
+        writefunction  = function(str)
+            response = str
+        end
+    }
+
+    c:perform()
+    return response 
 end
 
 function getServerLatency(host)
@@ -80,7 +100,7 @@ function getLowestLatencyHost(servers)
           lowest_latency_host = v['Host']
        end
     end
-    -- print('Lowest latency host: ' .. lowest_latency_host .. ' latency: ' .. lowest_latency)
+
     return lowest_latency_host
 end
 
@@ -98,6 +118,28 @@ function getUploadSpeed(url)
     return c:getinfo(cURL.INFO_SPEED_UPLOAD_T) / 1000000 -- bytes to megabytes
 end
 
+function getIpAddress()
+    tabl = json.decode(curlGetContent("https://api.myip.com/"))
+    return tabl['ip']
+end
+
+function getLocationData(ip)
+    result = curlGetContent("https://ipapi.co/".. ip .."/json/")
+    tabl = json.decode(result)
+    
+    if tabl['error'] then return false end
+
+    local location = {}
+    location['city'] = tabl['city']
+    location['country_name'] = tabl['country_name']
+    location['country_code'] = tabl['country_code']
+    location['postal'] = tabl['postal']
+    location['latitude'] = tabl['latitude']
+    location['longitude'] = tabl['longitude']
+
+    return location
+end
+
 -- Reads file for given ammount of seconds (time)
 function readFileByTime(filename, time)
     local data = ''
@@ -105,6 +147,7 @@ function readFileByTime(filename, time)
     file = io.open(filename, "r")
  
     for line in file:lines(100000000) do
+        print('second')
        if stopAfterTime(start_time, time) then
           break
        end
@@ -128,10 +171,22 @@ function readFileByTime(filename, time)
     local i=0
     for k, v in pairs(tabl) do
         if i>0 then json = json .. ', ' end -- adds comma between rows
-        json = json .. '"'.. k ..'": '.. v
+        json = json .. '"'.. k ..'": '.. jsonValueType(v)
         i=i+1
     end
 
     json = json .. "}"
     return json
+end
+
+function jsonValueType(value)
+    if type(value) == boolean then return tostring(value)
+    else return '"'..tostring(value)..'"'
+    end
+end
+
+function writeToFile(file, result)
+    file,err = io.open(file,'w')
+    file:write(result)
+    file:close()
 end

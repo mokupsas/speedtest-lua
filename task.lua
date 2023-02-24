@@ -36,10 +36,12 @@ if args.upload then
 elseif args.download then 
    result['download'] = getDownloadSpeed(host .. '/download')
 elseif args.get_location then 
-   print(args.get_location)
+   ip = getIpAddress()
+   result = getLocationData(ip)
+
 else -- auto
    result['download'] = getDownloadSpeed(host .. '/download')
    result['upload'] = getUploadSpeed(host .. '/upload.php')
 end
 
-print(tableToJson(result))
+print(json.encode(result))
