@@ -85,14 +85,14 @@ function getLowestLatencyHost(servers)
 end
 
 function getDownloadSpeed(url)
-    c = curlEasy(url, 600, false, true)
+    c = curlEasy(url, 600, true, true)
     c:setopt_accept_encoding('gzip, deflate, br')
     c:perform()
     return c:getinfo(cURL.INFO_SPEED_DOWNLOAD_T) / 1000000 -- bytes to megabytes
 end
 
 function getUploadSpeed(url)
-    c = curlEasy(url, 600, false, false)
+    c = curlEasy(url, 600, true, false)
     c:setopt(cURL.OPT_POSTFIELDS, readFileByTime("/dev/zero", 1))
     c:perform()
     return c:getinfo(cURL.INFO_SPEED_UPLOAD_T) / 1000000 -- bytes to megabytes
