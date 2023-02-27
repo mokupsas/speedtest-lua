@@ -6,7 +6,6 @@ local json = require "cjson"
 require("taskType")
 require("statusType")
 
-
 local servers = json.decode(readFile("servers.json"))
 ip = getIpAddress()
 location = getLocationData(ip) -- get current location data 
@@ -19,6 +18,8 @@ local result = {} -- result table
 if args.get_location == nil and args.host == nil then
    print(json.encode({status=STATUS_PENING, task=TASK_TYPE_HOST}))
    host = getLowestLatencyHost(getSerersByCountry(servers, location['country_name']))
+   print(json.encode({status=STATUS_DONE, task=TASK_TYPE_HOST, host=host}))
+   --host = "speedtest.litnet.lt:8080"
 elseif args.get_location == nil and args.host ~= nil then
    host = args.host
 end
