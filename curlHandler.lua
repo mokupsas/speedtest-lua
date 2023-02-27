@@ -1,4 +1,8 @@
 local cURL = require "cURL"
+local json = require "cjson"
+--Enums
+require("taskType")
+require("statusType")
 
 function getHeaders()
     return {
@@ -11,10 +15,29 @@ function getHeaders()
 end
 
 function curlEasy(host, time_out, no_prog, ignore_cont_len)
+    local start_time = os.time()
+    --print(start_time)
     c = cURL.easy{
         url            = host,
         ssl_verifypeer = false,
         ssl_verifyhost = false,
+        progressfunction = function(one, two, three, four)
+            if countExecTime(start_time) > 0 then
+                if four ~= 0 then
+                    print(json.encode({status=STATUS_PENING, task=TASK_TYPE_UPLOAD}))
+                elseif two ~= 0 then
+                    print(json.encode({status=STATUS_PENING, task=TASK_TYPE_DOWNLOAD}))
+                end
+                start_time = os.time()
+            end
+
+            --[[
+            if countExecTime(start_time) > 0 then
+                print(countExecTime(start_time))
+                start_time = os.time()
+            end
+            ]]
+        end,
         httpheader     = getHeaders(),
         writefunction  = function(str)
             -- print(str)
@@ -54,4 +77,9 @@ function curlGetContent(host)
 
     c:perform()
     return response 
+end
+
+function countExecTime(start_time)
+    end_time = os.time()
+    return os.difftime(end_time,start_time)
 end

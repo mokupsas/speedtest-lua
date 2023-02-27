@@ -48,7 +48,7 @@ end
 
 function getDownloadSpeed(url)
     print(json.encode({status=STATUS_PENING, task=TASK_TYPE_DOWNLOAD}))
-    c = curlEasy(url, 40, true, true)
+    c = curlEasy(url, 40, false, true)
     c:setopt_accept_encoding('gzip, deflate, br')
     c:perform()
     return c:getinfo(cURL.INFO_SPEED_DOWNLOAD_T) / 1000000 -- bytes to megabytes
@@ -56,7 +56,7 @@ end
 
 function getUploadSpeed(url)
     print(json.encode({status=STATUS_PENING, task=TASK_TYPE_UPLOAD}))
-    c = curlEasy(url, 40, true, false)
+    c = curlEasy(url, 40, false, false)
     c:setopt(cURL.OPT_POSTFIELDS, readFileByTime("/dev/zero", 1))
     c:perform()
     return c:getinfo(cURL.INFO_SPEED_UPLOAD_T) / 1000000 -- bytes to megabytes
