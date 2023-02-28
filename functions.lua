@@ -9,7 +9,7 @@ function getArgumentParser()
     parser:flag("-d --download")
     parser:flag("-g --get-location")
     parser:option("-h --host"):args("1")
-    parser:option("-o --output", "Save result to a file", "result.txt"):args("?")
+    parser:option("-o --output", "Save result to a file", "result.txt"):args("1")
     return parser
 end
 
@@ -35,8 +35,16 @@ function readFile(file_name)
     return file:read "*a"
 end
 
-function writeToFile(file, result)
-    file,err = io.open(file,'w')
-    file:write(result)
-    file:close()
+function writeToOutputFile(result, overwrite)
+    local args = getArgumentParser():parse()
+
+    if args.output then
+        if overwrite == nil or overwrite == false then
+            file,err = io.open(args.output,'a')
+        else
+            file,err = io.open(args.output,'w')
+        end
+        file:write(result.."\n")
+        file:close()
+    end
 end

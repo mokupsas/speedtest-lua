@@ -21,13 +21,17 @@ function curlEasy(host, time_out, no_prog, ignore_cont_len)
         url            = host,
         ssl_verifypeer = false,
         ssl_verifyhost = false,
+        -- Outputs that current task is happening
         progressfunction = function(one, two, three, four)
             if countExecTime(start_time) > 0 then
                 if four ~= 0 then
-                    print(json.encode({status=STATUS_PENING, task=TASK_TYPE_UPLOAD}))
+                    output = json.encode({status=STATUS_PENING, task=TASK_TYPE_UPLOAD})
+                    print(output)
                 elseif two ~= 0 then
-                    print(json.encode({status=STATUS_PENING, task=TASK_TYPE_DOWNLOAD}))
+                    output = json.encode({status=STATUS_PENING, task=TASK_TYPE_DOWNLOAD})
+                    print(output)
                 end
+                writeToOutputFile(output)
                 start_time = os.time()
             end
 

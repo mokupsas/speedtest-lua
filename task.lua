@@ -14,11 +14,19 @@ local args = getArgumentParser():parse()
 local host
 local result = {} -- result table
 
+if args.output then
+   writeToOutputFile("", true)
+end
+
 -- If task isn't to get location, find host
 if args.get_location == nil and args.host == nil then
-   print(json.encode({status=STATUS_PENING, task=TASK_TYPE_HOST}))
+   output = json.encode({status=STATUS_PENING, task=TASK_TYPE_HOST})
+   print(output)
+   writeToOutputFile(output)
    host = getLowestLatencyHost(getSerersByCountry(servers, location['country_name']))
-   print(json.encode({status=STATUS_DONE, task=TASK_TYPE_HOST, host=host}))
+   output = json.encode({status=STATUS_DONE, task=TASK_TYPE_HOST, host=host})
+   print(output)
+   writeToOutputFile(output)
    --host = "speedtest.litnet.lt:8080"
 elseif args.get_location == nil and args.host ~= nil then
    host = args.host
@@ -41,7 +49,8 @@ elseif args.get_location then
    result = location
 else -- auto
    download = getDownloadSpeed(host .. '/download')
-   print(json.encode({status=STATUS_DONE, task=TASK_TYPE_DOWNLOAD, download=download}))
+   output = json.encode({status=STATUS_DONE, task=TASK_TYPE_DOWNLOAD, download=download})
+   print(output)
 
    result = {
       status = STATUS_DONE,
@@ -51,3 +60,6 @@ else -- auto
 end
 
 print(json.encode(result))
+
+-- Output file
+writeToOutputFile(json.encode(result))
