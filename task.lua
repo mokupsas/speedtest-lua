@@ -40,10 +40,12 @@ elseif args.download then
 elseif args.get_location then 
    result = location
 else -- auto
+   download = getDownloadSpeed(host .. '/download')
+   print(json.encode({status=STATUS_DONE, task=TASK_TYPE_DOWNLOAD, download=download}))
+
    result = {
       status = STATUS_DONE,
-      task = TASK_TYPE_AUTO,
-      download = getDownloadSpeed(host .. '/download'),
+      task = TASK_TYPE_UPLOAD,
       upload = getUploadSpeed(host .. '/upload.php')
    }
 end
