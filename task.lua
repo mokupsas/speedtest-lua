@@ -6,16 +6,31 @@ local json = require "cjson"
 require("taskType")
 require("statusType")
 
-local servers = json.decode(readFile("servers.json"))
-ip = getIpAddress()
-location = getLocationData(ip) -- get current location data 
-
 local args = getArgumentParser():parse()
 local host
 local result = {} -- result table
 
 if args.output then
    writeToOutputFile("", true)
+end
+
+local servers = json.decode(readFile("servers.json"))
+ip = getIpAddress()
+
+if ip == false then
+   output = makeJsonError("Couldn't fetch device ip address", TASK_TYPE_DEVICEDATA, false)
+   print(output)
+   writeToOutputFile(output)
+   return;
+end
+
+location = getLocationData(ip) -- get current location data 
+
+if location == false then
+   output = makeJsonError("Couldn't fetch device location", TASK_TYPE_DEVICEDATA, false)
+   print(output)
+   writeToOutputFile(output)
+   return;
 end
 
 -- If task isn't to get location, find host

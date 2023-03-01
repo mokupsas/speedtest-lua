@@ -49,7 +49,7 @@ function getLowestLatencyHost(servers)
 end
 
 function getDownloadSpeed(url)
-    print(json.encode({status=STATUS_PENING, task=TASK_TYPE_DOWNLOAD}))
+    print(json.encode({status=STATUS_PENING, action=TASK_TYPE_DOWNLOAD}))
     c = curlEasy(url, 40, false, true)
     c:setopt_accept_encoding('gzip, deflate, br')
     c:perform()
@@ -57,7 +57,7 @@ function getDownloadSpeed(url)
 end
 
 function getUploadSpeed(url)
-    print(json.encode({status=STATUS_PENING, task=TASK_TYPE_UPLOAD}))
+    print(json.encode({status=STATUS_PENING, action=TASK_TYPE_UPLOAD}))
     c = curlEasy(url, 40, false, false)
     c:setopt(cURL.OPT_POSTFIELDS, readFileByTime("/dev/zero", 1))
     c:perform()
@@ -65,13 +65,23 @@ function getUploadSpeed(url)
 end
 
 function getIpAddress()
-    tabl = json.decode(curlGetContent("https://api.myip.com/"))
-    return tabl['ip']
+    --response = curlGetContent("https://api.myip.com/")
+    response = curlGetContent("http://ip-api.com/json/")
+    if response == false then
+       return false
+    end
+    tabl = json.decode(response)
+    return tabl['query']
 end
 
 function getLocationData(ip)
-    result = curlGetContent("https://ipapi.co/".. ip .."/json/")
-    tabl = json.decode(result)
+    response = curlGetContent("https://ipapi.co/".. ip .."/json/")
+
+    if response == false then
+        return false
+     end
+
+    tabl = json.decode(response)
     
     if tabl['error'] then return false end
 
