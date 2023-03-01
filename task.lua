@@ -47,6 +47,13 @@ elseif args.get_location == nil and args.host ~= nil then
    host = args.host
 end
 
+-- if user set custom host, check for availability
+if args.host ~= nil then
+   if getServerLatency(host) == false then
+      return;
+   end
+end
+
 -- Determine speedtest mode auto/upload/download
 if args.upload then
    result = {

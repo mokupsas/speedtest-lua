@@ -16,7 +16,7 @@ function getServerLatency(host)
     -- Checking for errors
     if err then 
         -- print('Error occured with host: ' .. host) 
-        output = json.encode({status=STATUS_ERROR, error_msg="Error occured with host: ".. host, action=ACTION_TYPE_HOST, continue=true})
+        output = json.encode({status=STATUS_ERROR, error_msg="Error occured with host: ".. host, action=ACTION_TYPE_HOST})
         print(output)
         writeToOutputFile(output)
     end
