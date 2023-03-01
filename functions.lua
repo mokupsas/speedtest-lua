@@ -9,7 +9,7 @@ function getArgumentParser()
     parser:flag("-u --upload")
     parser:flag("-d --download")
     parser:flag("-g --get-location")
-    parser:option("-h --host"):args("1")
+    parser:option("-s --host"):args("1")
     parser:option("-o --output", "Save result to a file", "result.txt"):args("1")
     return parser
 end
