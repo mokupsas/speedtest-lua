@@ -1,4 +1,5 @@
 local argparse = require("argparse")
+local json = require "cjson"
 
 function getArgumentParser()
     local parser = argparse("speedtest", "An speedtest library.")
@@ -47,4 +48,12 @@ function writeToOutputFile(result, overwrite)
         file:write(result.."\n")
         file:close()
     end
+end
+
+function makeJsonError(msg, action_type, contin)
+    return json.encode({status=STATUS_ERROR, error_msg=msg, action=action_type, continue=contin})
+end
+
+function countSpeed(start_time, bytes_sent)
+    return bytes_sent / countExecTime(start_time) / 1000000
 end
