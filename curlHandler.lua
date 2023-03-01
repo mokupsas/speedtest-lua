@@ -15,24 +15,28 @@ function getHeaders()
 end
 
 function curlEasy(host, time_out, no_prog, ignore_cont_len)
-    local start_time = os.time()
+    local time_pf = os.time() -- time before each progressfunction iteration
+    local start_time_all = os.time() -- overal execution start time
+    local prevBytes = 0;
     --print(start_time)
     c = cURL.easy{
         url            = host,
         ssl_verifypeer = false,
         ssl_verifyhost = false,
         -- Outputs that current task is happening
-        progressfunction = function(one, two, three, four)
-            if countExecTime(start_time) > 0 then
-                if four ~= 0 then
-                    output = json.encode({status=STATUS_PENING, task=TASK_TYPE_UPLOAD})
+        progressfunction = function(downloadSize, downloadSent, uploadSize, uploadSent)
+            if countExecTime(time_pf) > 0 then
+                if uploadSent ~= 0 then
+                    output = json.encode({status=STATUS_PENING, action=TASK_TYPE_UPLOAD, speed=countSpeed(start_time_all, uploadSent)})
                     print(output)
-                elseif two ~= 0 then
-                    output = json.encode({status=STATUS_PENING, task=TASK_TYPE_DOWNLOAD})
+                    --print(countSpeed(start_time_all, uploadSent))
+                elseif downloadSent ~= 0 then
+                    output = json.encode({status=STATUS_PENING, action=TASK_TYPE_DOWNLOAD, speed=countSpeed(start_time_all, downloadSent)})
                     print(output)
+                    --print(countSpeed(start_time_all, downloadSent))
                 end
                 writeToOutputFile(output)
-                start_time = os.time()
+                time_pf = os.time()
             end
 
             --[[
@@ -80,6 +84,11 @@ function curlGetContent(host)
     }
 
     c:perform()
+
+    if c:getinfo(cURL.INFO_RESPONSE_CODE) ~= 200 then
+        return false
+    end
+    
     return response 
 end
 
