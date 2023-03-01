@@ -14,13 +14,6 @@ function getArgumentParser()
     return parser
 end
 
-function doesTableExist(table)
-    if table ~= nil then
-        return true
-    end
-    return false
-end
-
 function getSerersByCountry(tabl, country)
     local serverByCountry = {}
     for k, v in pairs(tabl) do

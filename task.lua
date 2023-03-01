@@ -7,16 +7,14 @@ require("actionType")
 require("statusType")
 
 local args = getArgumentParser():parse()
-local host
+local host, output
+local servers = json.decode(readFile("servers.json"))
 local result = {} -- result table
 
-if args.output then
-   writeToOutputFile("", true)
-end
+if args.output then writeToOutputFile("", true) end   -- clear output file
 
-local servers = json.decode(readFile("servers.json"))
-ip = getIpAddress()
-
+-- Fetching device IP address
+local ip = getIpAddress()
 if ip == false then
    output = makeJsonError("Couldn't fetch device ip address", ACTION_TYPE_DEVICEDATA, false)
    print(output)
@@ -24,8 +22,8 @@ if ip == false then
    return;
 end
 
-location = getLocationData(ip) -- get current location data 
-
+-- Fetching device location
+local location = getLocationData(ip) -- get current location data 
 if location == false then
    output = makeJsonError("Couldn't fetch device location", ACTION_TYPE_DEVICEDATA, false)
    print(output)
@@ -33,7 +31,6 @@ if location == false then
    return;
 end
 
--- If task isn't to get location, find host
 if args.get_location == nil and args.host == nil then
    output = json.encode({status=STATUS_PENING, action=ACTION_TYPE_HOST})
    print(output)
@@ -42,8 +39,7 @@ if args.get_location == nil and args.host == nil then
    output = json.encode({status=STATUS_DONE, action=ACTION_TYPE_HOST, host=host})
    print(output)
    writeToOutputFile(output)
-   --host = "speedtest.litnet.lt:8080"
-elseif args.get_location == nil and args.host ~= nil then
+elseif args.get_location == nil and args.host ~= nil then   -- If task isn't to get location, find host
    host = args.host
 end
 
@@ -56,32 +52,19 @@ end
 
 -- Determine speedtest mode auto/upload/download
 if args.upload then
-   result = {
-      status = STATUS_DONE,
-      task = ACTION_TYPE_UPLOAD,
-      upload = getUploadSpeed(host .. '/upload.php')
-   }
+   output = {status = STATUS_DONE, task = ACTION_TYPE_UPLOAD, upload = getUploadSpeed(host .. '/upload.php')}
 elseif args.download then 
-   result = {
-      status = STATUS_DONE,
-      action = ACTION_TYPE_DOWNLOAD,
-      download = getDownloadSpeed(host .. '/download')
-   }
+   output = {status = STATUS_DONE, action = ACTION_TYPE_DOWNLOAD, download = getDownloadSpeed(host .. '/download')}
 elseif args.get_location then 
-   result = location
+   output = location
 else -- auto
    download = getDownloadSpeed(host .. '/download')
    output = json.encode({status=STATUS_DONE, action=ACTION_TYPE_DOWNLOAD, speed=download})
    print(output)
 
-   result = {
-      status = STATUS_DONE,
-      task = ACTION_TYPE_UPLOAD,
-      speed = getUploadSpeed(host .. '/upload.php')
-   }
+   output = {status = STATUS_DONE, task = ACTION_TYPE_UPLOAD, speed = getUploadSpeed(host .. '/upload.php')}
 end
 
-print(json.encode(result))
 done = json.encode({done=true})
 print(done)
 

@@ -38,13 +38,6 @@ function curlEasy(host, time_out, no_prog, ignore_cont_len)
                 writeToOutputFile(output)
                 time_pf = os.time()
             end
-
-            --[[
-            if countExecTime(start_time) > 0 then
-                print(countExecTime(start_time))
-                start_time = os.time()
-            end
-            ]]
         end,
         httpheader     = getHeaders(),
         writefunction  = function(str)
