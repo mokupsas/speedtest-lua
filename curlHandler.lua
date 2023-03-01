@@ -1,7 +1,7 @@
 local cURL = require "cURL"
 local json = require "cjson"
 --Enums
-require("taskType")
+require("actionType")
 require("statusType")
 
 function getHeaders()
@@ -27,11 +27,11 @@ function curlEasy(host, time_out, no_prog, ignore_cont_len)
         progressfunction = function(downloadSize, downloadSent, uploadSize, uploadSent)
             if countExecTime(time_pf) > 0 then
                 if uploadSent ~= 0 then
-                    output = json.encode({status=STATUS_PENING, action=TASK_TYPE_UPLOAD, speed=countSpeed(start_time_all, uploadSent)})
+                    output = json.encode({status=STATUS_PENING, action=ACTION_TYPE_UPLOAD, speed=countSpeed(start_time_all, uploadSent)})
                     print(output)
                     --print(countSpeed(start_time_all, uploadSent))
                 elseif downloadSent ~= 0 then
-                    output = json.encode({status=STATUS_PENING, action=TASK_TYPE_DOWNLOAD, speed=countSpeed(start_time_all, downloadSent)})
+                    output = json.encode({status=STATUS_PENING, action=ACTION_TYPE_DOWNLOAD, speed=countSpeed(start_time_all, downloadSent)})
                     print(output)
                     --print(countSpeed(start_time_all, downloadSent))
                 end
