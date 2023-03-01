@@ -20,11 +20,11 @@ end
 
 -- If task isn't to get location, find host
 if args.get_location == nil and args.host == nil then
-   output = json.encode({status=STATUS_PENING, task=TASK_TYPE_HOST})
+   output = json.encode({status=STATUS_PENING, action=TASK_TYPE_HOST})
    print(output)
    writeToOutputFile(output)
    host = getLowestLatencyHost(getSerersByCountry(servers, location['country_name']))
-   output = json.encode({status=STATUS_DONE, task=TASK_TYPE_HOST, host=host})
+   output = json.encode({status=STATUS_DONE, action=TASK_TYPE_HOST, host=host})
    print(output)
    writeToOutputFile(output)
    --host = "speedtest.litnet.lt:8080"
@@ -42,24 +42,27 @@ if args.upload then
 elseif args.download then 
    result = {
       status = STATUS_DONE,
-      task = TASK_TYPE_DOWNLOAD,
+      action = TASK_TYPE_DOWNLOAD,
       download = getDownloadSpeed(host .. '/download')
    }
 elseif args.get_location then 
    result = location
 else -- auto
    download = getDownloadSpeed(host .. '/download')
-   output = json.encode({status=STATUS_DONE, task=TASK_TYPE_DOWNLOAD, download=download})
+   output = json.encode({status=STATUS_DONE, action=TASK_TYPE_DOWNLOAD, speed=download})
    print(output)
 
    result = {
       status = STATUS_DONE,
       task = TASK_TYPE_UPLOAD,
-      upload = getUploadSpeed(host .. '/upload.php')
+      speed = getUploadSpeed(host .. '/upload.php')
    }
 end
 
 print(json.encode(result))
+done = json.encode({done=true})
+print(done)
 
 -- Output file
 writeToOutputFile(json.encode(result))
+writeToOutputFile(done) -- responds that actions are done
