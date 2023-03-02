@@ -15,10 +15,7 @@ function getServerLatency(host)
 
     -- Checking for errors
     if err then 
-        -- print('Error occured with host: ' .. host) 
-        output = json.encode({status=STATUS_ERROR, error_msg="Error occured with host: ".. host, action=ACTION_TYPE_HOST})
-        print(output)
-        writeToOutputFile(output)
+        doResponse({status=STATUS_ERROR, error_msg="Error occured with host: ".. host, action=ACTION_TYPE_HOST})
     end
 
     -- Checking if server response was successful
@@ -49,7 +46,7 @@ function getLowestLatencyHost(servers)
 end
 
 function getDownloadSpeed(url)
-    print(json.encode({status=STATUS_PENING, action=ACTION_TYPE_DOWNLOAD}))
+    doResponse({status=STATUS_PENING, action=ACTION_TYPE_DOWNLOAD})
     c = curlEasy(url, 40, false, true)
     c:setopt_accept_encoding('gzip, deflate, br')
     c:perform()
@@ -57,7 +54,7 @@ function getDownloadSpeed(url)
 end
 
 function getUploadSpeed(url)
-    print(json.encode({status=STATUS_PENING, action=ACTION_TYPE_UPLOAD}))
+    doResponse({status=STATUS_PENING, action=ACTION_TYPE_UPLOAD})
     c = curlEasy(url, 40, false, false)
     c:setopt(cURL.OPT_POSTFIELDS, readFileByTime("/dev/zero", 1))
     c:perform()

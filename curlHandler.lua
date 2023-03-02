@@ -1,5 +1,4 @@
 local cURL = require "cURL"
-local json = require "cjson"
 --Enums
 require("actionType")
 require("statusType")
@@ -17,8 +16,6 @@ end
 function curlEasy(host, time_out, no_prog, ignore_cont_len)
     local time_pf = os.time() -- time before each progressfunction iteration
     local start_time_all = os.time() -- overal execution start time
-    local prevBytes = 0;
-    --print(start_time)
     c = cURL.easy{
         url            = host,
         ssl_verifypeer = false,
@@ -27,15 +24,10 @@ function curlEasy(host, time_out, no_prog, ignore_cont_len)
         progressfunction = function(downloadSize, downloadSent, uploadSize, uploadSent)
             if countExecTime(time_pf) > 0 then
                 if uploadSent ~= 0 then
-                    output = json.encode({status=STATUS_PENING, action=ACTION_TYPE_UPLOAD, speed=countSpeed(start_time_all, uploadSent)})
-                    print(output)
-                    --print(countSpeed(start_time_all, uploadSent))
+                    doResponse({status=STATUS_PENING, action=ACTION_TYPE_UPLOAD, speed=countSpeed(start_time_all, uploadSent)})
                 elseif downloadSent ~= 0 then
-                    output = json.encode({status=STATUS_PENING, action=ACTION_TYPE_DOWNLOAD, speed=countSpeed(start_time_all, downloadSent)})
-                    print(output)
-                    --print(countSpeed(start_time_all, downloadSent))
+                    doResponse({status=STATUS_PENING, action=ACTION_TYPE_DOWNLOAD, speed=countSpeed(start_time_all, downloadSent)})
                 end
-                writeToOutputFile(output)
                 time_pf = os.time()
             end
         end,
@@ -83,9 +75,4 @@ function curlGetContent(host)
     end
     
     return response 
-end
-
-function countExecTime(start_time)
-    end_time = os.time()
-    return os.difftime(end_time,start_time)
 end

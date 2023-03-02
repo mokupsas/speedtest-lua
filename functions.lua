@@ -43,10 +43,21 @@ function writeToOutputFile(result, overwrite)
     end
 end
 
-function makeJsonError(msg, action_type, contin)
-    return json.encode({status=STATUS_ERROR, error_msg=msg, action=action_type, continue=contin})
+function makeErrorArray(msg, action_type, contin)
+    return {status=STATUS_ERROR, error_msg=msg, action=action_type, continue=contin}
 end
 
 function countSpeed(start_time, bytes_sent)
     return bytes_sent / countExecTime(start_time) / 1000000
+end
+
+function countExecTime(start_time)
+    end_time = os.time()
+    return os.difftime(end_time,start_time)
+end
+
+function doResponse(array)
+    output = json.encode(array)
+    print(output)
+    writeToOutputFile(output)
 end
